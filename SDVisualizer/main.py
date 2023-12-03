@@ -262,6 +262,8 @@ if __name__ == "__main__":
             try:
                 Utilities.crop(f"{imgname}.png", "./Files/", f"./Files/crop/{imgname}", 16, height)
             except FileNotFoundError:
+                pathlib.Path.rmdir(pathlib.Path(f"./Files/crop/{imgname}"))
+                pathlib.Path.rmdir(pathlib.Path(f"./Files/crop/"))
                 root.title("Error")
                 root.iconphoto(True,  tk.PhotoImage(file="./Files/icon/64.png"))
                 ErrorMsg(root).pack(fill="both", expand=True)
