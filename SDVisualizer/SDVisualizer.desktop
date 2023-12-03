@@ -1,0 +1,14 @@
+#!/usr/bin/bash ./start.sh
+[Desktop Entry]
+Type=Application
+Name=SDVisualizer
+Comment="Helps find objects' index for modding."
+Exec=python3 main.py
+Icon='./Files/icon/16.svg'
+Terminal=false
+Categories=Other;
+
+Name[es]=SDVisualizador
+Comment[es]=Ayuda a conocer el índice de ciertas imágenes.
+Path=./
+StartupNotify=false
