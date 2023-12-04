@@ -9,6 +9,7 @@ global cv
 global photo
 global which_img
 global max_index
+global top_padding
 
 
 def get_img():
@@ -135,10 +136,15 @@ class Window(tk.Frame):
     def change_window(self):
         global cv
         global index
+        global top_padding
+        if which_img == "emotes":
+            index = 4
         if which_img == "Craftables":
             cv.config(width=100, height=150)
+            top_padding = 15
         else:
             cv.config(width=100, height=100)
+            top_padding = 20
         self.craft.destroy()
         self.springobj.destroy()
         self.emote.destroy()
@@ -151,8 +157,7 @@ class Window(tk.Frame):
         self.submit.pack(side="bottom")
         # for some reason it won't work until you click it
         get_img()
-        self.forward()
-        self.goback()
+        self.update_once()
 
     def calculate(self):
         # get the value from the input widget, convert
@@ -160,9 +165,12 @@ class Window(tk.Frame):
         try:
             global index
             global max_index
+            min_index = 0
+            if which_img == "emotes":
+                min_index = 4
             i = int(self.entry.get())
-            if i < 0 or i > max_index:
-                self.output.configure(text=f"Value can only be \nbetween 0 and {max_index}.")
+            if i < min_index or i > max_index:
+                self.output.configure(text=f"Value can only be \nbetween {min_index} and {max_index}.")
                 return
             result = "%s" % i
             index = i
@@ -170,7 +178,10 @@ class Window(tk.Frame):
 
             cv.delete("all")
             get_img()
-            cv.create_image(90, 50, image=photo, anchor='center')
+            # get w
+            w = root.winfo_width()
+            imgpadding = w / 2 - 32
+            cv.create_image(imgpadding, top_padding, image=photo, anchor='nw')
         except ValueError:
             result = "Please enter digits only"
 
@@ -190,7 +201,9 @@ class Window(tk.Frame):
             if left != 0:
                 index = index - left
             else:
-                index = index - 4
+                new_index = index - 4
+                if new_index > 0:
+                    index = new_index
         else:
             if index == 0:
                 return
@@ -199,7 +212,10 @@ class Window(tk.Frame):
         # remove image and then get it again
         cv.delete("all")
         get_img()
-        cv.create_image(90, 50, image=photo, anchor='center')
+        # get w
+        w = root.winfo_width()
+        imgpadding = w / 2 - 32
+        cv.create_image(imgpadding, top_padding, image=photo, anchor='nw')
 
     def forward(self):
         global index
@@ -231,7 +247,22 @@ class Window(tk.Frame):
         # remove image and then get it again
         cv.delete("all")
         get_img()
-        cv.create_image(90, 50, image=photo, anchor='center')
+        # get w
+        w = root.winfo_width()
+        imgpadding = w / 2 - 32
+        cv.create_image(imgpadding, top_padding, image=photo, anchor='nw')
+
+    def update_once(self):
+        global index
+        global which_img
+        if which_img == "emotes":
+            index = 4
+        else:
+            index = 0
+        self.output.configure(text=index)
+        cv.delete("all")
+        get_img()
+        cv.create_image(61, 20, image=photo, anchor='nw')
 
 
 # if this is run as a program (versus being imported),
@@ -279,7 +310,7 @@ if __name__ == "__main__":
     except NameError:
         cv.config(width=16, height=16)
     cv.pack(side='top', fill='both')
-    cv.create_image(50, 50, image=photo, anchor='center')
+    cv.create_image(120 / 2 - 16, 20, image=photo, anchor='nw')
 
     # done
     root.iconphoto(True,  tk.PhotoImage(file="./Files/icon/64.png"))
