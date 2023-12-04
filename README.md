@@ -32,7 +32,7 @@ After that, you can launch `main.py`.
 
 ## Known issues
 
-Craftables' window shows the top of items cut off by a few pixels. (This is my first time using python, so I have no idea how to fix it)
+None
 
 <hr>
 
